@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <title>XHTML 1.0 Example</title>
+        <style type="text/css">
+        /* <![CDATA[ */
+            div { margin: 1em; padding: 1em; cursor: pointer; }
+            .jank { border: 1px solid blue; }
+            .protoDiv { border: 1px dotted green; }
+        /* ]]> */
+        </style>
+        <script type="text/javascript" src="prototype.js"></script>
+        <script type="text/javascript" src="context.js"></script>
+        <script type="text/javascript">
+            /* <![CDATA[ */
+                var contextList = {
+                    protoContext: ['Prototype'],
+                    oldContext: ['Old jQuery', window, ['jquery-1.2.3.js']],
+                    newContext: ['New jQuery', window, ['jquery-1.4.2.js']]
+                };
+                create_context_onload(contextList, function () {
+
+                    // Use jQuery 1.2.3
+                    with (oldContext) {
+                        context.cnt = 0;
+                        $('#newJank').click(function(){
+                            context.cnt += 1;
+                            $(this).parent().before('<div id="jank-' + context.cnt + '" class="jank">' + context.cnt + ': Added by jQuery ' + $(document).jquery + '</div>');
+                        });
+                    }
+
+                    // Use jQuery 1.4.2
+                    with (newContext) {
+                        $('.jank, .protoDiv').live('click', function () {
+                            alert('jQuery ' + $(this).jquery + '\n' + $(this).attr('id'));
+                        });
+                    }
+
+                    // Use Prototype 1.6.1
+                    with (protoContext) {
+                        context.cnt = 0;
+                        $('protoButton').observe('click', function () {
+                            context.cnt += 1;
+                            $('controlls').insert({ before: '<div id="proto-' + context.cnt + '" class="protoDiv">' + context.cnt + ': Added by Prototype ' + Prototype.Version + '</div>' });
+                        });
+                    }
+
+                    // Use jQuery 1.2.3
+                    with (oldContext) {
+                        $('#cntButton').click(function () {
+                            alert('jQuery' + $(this).jquery + '\nJank: ' + $('.jank').length + '\nProto: ' + $('.protoDiv').length);
+                        });
+                    }
+                });
+            /* ]]> */
+        </script>
+    </head>
+    <body>
+        <div id="controlls">
+            <button id="cntButton">Count</button>
+            <button id="newJank">jQuery</button>
+            <button id="protoButton">Prototype</button>
+        </div>
+    </body>
+</html>
