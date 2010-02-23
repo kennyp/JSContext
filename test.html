@@ -3,7 +3,7 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
-        <title>XHTML 1.0 Example</title>
+        <title>JSContext Example</title>
         <style type="text/css">
         /* <![CDATA[ */
             div { margin: 1em; padding: 1em; cursor: pointer; }
@@ -36,6 +36,16 @@
                         $('.jank, .protoDiv').live('click', function () {
                             alert('jQuery ' + $(this).jquery + '\n' + $(this).attr('id'));
                         });
+
+                        // color_shift func and vars
+                        context.colors = ['white','red','orange','yellow','blue','green','indigo','violet'];
+                        context.fcolors = ['black','yellow','black','red','white','white','white','black'];
+                        context.color_idx = 0;
+                        var color_shift = function () {
+                            context.color_idx = (context.color_idx < (context.colors.length - 1)) ? (context.color_idx + 1) : 0;
+                            $('html').css('backgroundColor', context.colors[context.color_idx]);
+                            $('html').css('color', context.fcolors[context.color_idx]);
+                        }
                     }
 
                     // Use Prototype 1.6.1
@@ -45,6 +55,9 @@
                             context.cnt += 1;
                             $('controlls').insert({ before: '<div id="proto-' + context.cnt + '" class="protoDiv">' + context.cnt + ': Added by Prototype ' + Prototype.Version + '</div>' });
                         });
+
+                        // Attach color_shift event
+                        $('colorShift').observe('click', color_shift);
                     }
 
                     // Use jQuery 1.2.3
@@ -60,6 +73,7 @@
     <body>
         <div id="controlls">
             <button id="cntButton">Count</button>
+            <button id="colorShift">Shift Colors</button>
             <button id="newJank">jQuery</button>
             <button id="protoButton">Prototype</button>
         </div>
