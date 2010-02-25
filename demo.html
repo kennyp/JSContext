@@ -43,8 +43,8 @@
                         context.color_idx = 0;
                         var color_shift = function () {
                             context.color_idx = (context.color_idx < (context.colors.length - 1)) ? (context.color_idx + 1) : 0;
-                            $('html').css('backgroundColor', context.colors[context.color_idx]);
-                            $('html').css('color', context.fcolors[context.color_idx]);
+                            $('body').css('backgroundColor', context.colors[context.color_idx]);
+                            $('body').css('color', context.fcolors[context.color_idx]);
                         }
                     }
 
