@@ -20,7 +20,7 @@
                     oldContext: ['Old jQuery', window, ['jquery-1.2.3.js']],
                     newContext: ['New jQuery', window, ['jquery-1.4.2.js']]
                 };
-                create_context_onload(contextList, function () {
+                JSContext.onload(contextList, function () {
 
                     // Use jQuery 1.2.3
                     with (oldContext) {
