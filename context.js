@@ -23,10 +23,6 @@ if (typeof Array.prototype.each === 'undefined') {
     };
 }
 
-if (typeof console === 'undefined') {
-    console = { log: function(msg) { alert(msg); } };
-}
-
 if (typeof xhr === 'undefined') {
     xhr = {
         create: function () {
@@ -52,6 +48,40 @@ if (typeof xhr === 'undefined') {
     }
 }
 
+var JSContext = {
+    alrt : function (msg) {
+        var myDiv = document.createElement('div');
+        myDiv.innerHTML = msg.replace('\n','<br/>').replace(/\n/,'<br/>') + '<br/>';
+        with (myDiv.style) {
+            backgroundColor = 'silver';
+            textAlign = 'center';
+            border = '1px solid black';
+            left = '50%';
+            top = '180px';
+
+            var userAgent = navigator.userAgent.toLowerCase();
+            if (/msie/.test(userAgent) && !/opera/.test(userAgent)) {
+                position = 'relative';
+            } else {
+                position = 'absolute';
+            }
+        }
+        var myButton = document.createElement('button');
+        myButton.innerHTML = 'OK';
+        myButton.onclick = function () {
+            document.getElementsByTagName('body')[0].removeChild(myDiv);
+        };
+        myDiv.appendChild(myButton);
+        document.getElementsByTagName('body')[0].appendChild(myDiv);
+    },
+    log : function (msg) {
+        console.log(msg);
+    },
+    dir : function (obj) {
+        console.dir(obj);
+    }
+}
+
 /**
  * Create a new context
  *
@@ -74,16 +104,20 @@ var create_context = (function () {
 
         // Define the new context
         var newContext = {
-            window : {
-                context_name : name,
-                global_window: current_window,
-                document : current_window.document,
-                alert : function (msg) {
-                    current_window.alert(msg);
-                },
-                console : current_window.console,
-                context : {}
-            },
+            window : (function () {
+                function F() {}
+                F.prototype = current_window;
+                var f = new F();
+                f.context_name = name;
+                f.global_window = current_window;
+                f.document = current_window.document;
+                f.context = {
+                    alrt : JSContext.alrt,
+                    dir : JSContext.dir,
+                    log : JSContext.log
+                };
+                return f;
+            }()),
             load : function (res) {
                 if (typeof ContextCatalog[res] === 'undefined') {
                     var req = xhr.create();

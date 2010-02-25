@@ -34,7 +34,7 @@
                     // Use jQuery 1.4.2
                     with (newContext) {
                         $('.jank, .protoDiv').live('click', function () {
-                            alert('jQuery ' + $(this).jquery + '\n' + $(this).attr('id'));
+                            context.alrt('jQuery ' + $(this).jquery + '\n' + $(this).attr('id'));
                         });
 
                         // color_shift func and vars
@@ -63,7 +63,7 @@
                     // Use jQuery 1.2.3
                     with (oldContext) {
                         $('#cntButton').click(function () {
-                            alert('jQuery' + $(this).jquery + '\nJank: ' + $('.jank').length + '\nProto: ' + $('.protoDiv').length);
+                            context.alrt('jQuery' + $(this).jquery + '\nJank: ' + $('.jank').length + '\nProto: ' + $('.protoDiv').length);
                         });
                     }
                 });
